@@ -8,10 +8,22 @@ package:
 source:
   - url: https://pypi.org/packages/source/f/finch-tensor/finch_tensor-${{ version }}.tar.gz
     sha256: e7b3fd48fc804dbaec90b98556c44dd44a37517b0553d96dbe355786fdf99a7c
+    patches:
+      - patches/0001-use-conda-forge-hdf5.patch
 
 build:
-  noarch: python
-  script: uv pip install --python ${{ PYTHON }} . -vv --no-deps
+  skip:
+    - win
+  python:
+    version_independent: true
+  script: |
+    # see patches/0001
+    sed -i.bak \
+      -e "s|CONDA_PREFIX_PLACEHOLDER|$PREFIX|g" \
+      -e "s|CONDA_SHLIB_EXT_PLACEHOLDER|$SHLIB_EXT|g" \
+      src/finch/juliapkg.json
+    rm -f src/finch/juliapkg.json.bak
+    uv pip install --python ${{ PYTHON }} . -vv --no-deps
   number: 0
 
 requirements:
@@ -19,7 +31,7 @@ requirements:
     - python ${{ python_min }}.*
     - uv
   run:
-    - python >=${{ python_min }}
+    - python
     - numpy >=2.0,<2.4
     - numba >=0.61,<2
     - donfig >=0.8.1.post1,<0.9.0
@@ -31,8 +43,9 @@ requirements:
     # C backend:
     - c-compiler >=2.0.0  # minimally activated on unix
     # Julia backend:
-    # - pyjuliapkg >=0.1.16,<0.2.0
-    # - pyjuliacall >=0.9.24,<0.10.0
+    - pyjuliapkg >=0.1.16,<0.2.0
+    - pyjuliacall >=0.9.24,<0.10.0
+    - hdf5
     # MLIR backend:
     # - mlir-python-bindings  # pending https://github.com/finch-tensor/finch-tensor/issues/567
 
