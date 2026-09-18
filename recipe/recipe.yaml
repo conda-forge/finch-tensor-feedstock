@@ -24,7 +24,7 @@ build:
       src/finch/juliapkg.json
     rm -f src/finch/juliapkg.json.bak
     uv pip install --python ${{ PYTHON }} . -vv --no-deps
-  number: 0
+  number: 1
 
 requirements:
   host:
