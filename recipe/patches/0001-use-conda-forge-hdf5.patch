@@ -1,0 +1,30 @@
+From d9f2d3c0c73934829118575fe0049a8f374542a8 Mon Sep 17 00:00:00 2001
+From: Lucas Colley <lucas.colley8@gmail.com>
+Date: Fri, 18 Sep 2026 13:06:03 +0100
+Subject: [PATCH] use-conda-forge-hdf5
+
+avoid HDF5.jl pulling in its own hdf5 binaries
+---
+ src/finch/juliapkg.json | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/finch/juliapkg.json b/src/finch/juliapkg.json
+index 854162b..c9a3c1d 100644
+--- a/src/finch/juliapkg.json
++++ b/src/finch/juliapkg.json
+@@ -7,7 +7,11 @@
+     },
+     "HDF5": {
+       "uuid": "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f",
+-      "version": "0.17.2"
++      "version": "0.17.2",
++      "preferences": {
++        "libhdf5": "CONDA_PREFIX_PLACEHOLDER/lib/libhdf5CONDA_SHLIB_EXT_PLACEHOLDER",
++        "libhdf5_hl": "CONDA_PREFIX_PLACEHOLDER/lib/libhdf5_hlCONDA_SHLIB_EXT_PLACEHOLDER"
++      }
+     },
+     "NPZ": {
+       "uuid": "15e1cf62-19b3-5cfa-8e77-841668bca605",
+-- 
+2.55.0
+
