@@ -12,6 +12,8 @@ source:
       - patches/0001-use-conda-forge-hdf5.patch
 
 build:
+  skip:
+    - win
   python:
     version_independent: true
   script: |
